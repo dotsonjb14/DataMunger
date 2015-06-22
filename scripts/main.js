@@ -1,4 +1,6 @@
 var data = chrome.extension.getBackgroundPage().data;
+var steps = [];
+var currentData = null;
 
 data["Test DataSet"] = [{
     "id": 1,
@@ -629,6 +631,8 @@ $(function () {
         var hash = window.location.hash;
         $("#nav-sidebar li").attr("class", "");
         $("#link-" + hash.replace(/ /g, "_").replace("#", "")).attr("class", "active");
+
+        document.dispatchEvent(new CustomEvent("set-data"));
     }
 });
 
@@ -638,6 +642,102 @@ window.addEventListener('popstate', function (event) {
     $("#link-" + hash.replace(/ /g, "_").replace("#", "")).attr("class", "active");
 });
 
-document.addEventListener("set-data", function (event) {
+function AddNewStep() {
+    var i = steps.length;
+    steps.push({
+        f: "-1",
+        js: ""
+    });
 
+    $("#data-container").append(CreateStep(i, steps[i]));
+}
+
+function ExecuteStep(step) {
+
+}
+
+function RemoveStep(step) {
+
+}
+
+function UpdateStep(step) {
+    step[this.getAttribute("data-field")] = this.value;
+}
+
+function CreateStep(i, step) {
+    var fset = $("<fieldset />");
+    fset.append($("<legend />").text("Step " + (i + 1)));
+
+    var funcList = $("<select />").attr({
+        class: "form-control",
+        "data-field": "f"
+    });
+    funcList.change(_.partial(UpdateStep, step));
+    funcList.append($("<option />").text("... Select").val("-1"));
+    funcList.append($("<option />").text("Filter").val("filter"));
+    funcList.append($("<option />").text("Map").val("map"));
+    funcList.append($("<option />").text("Raw").val("raw"));
+
+    funcList.val(step.f);
+
+    fset.append(funcList);
+
+    fset.append($("<input />").attr({
+        type: "text",
+        class: "form-control",
+        placeholder: "Expression",
+        value: step.js,
+        "data-field": "js"
+    }).change(_.partial(UpdateStep, step)));
+
+    fset.append("<br/>");
+
+    fset.append($("<input />").attr({
+        type: "button",
+        class: "btn btn-primary",
+        value: "Add Step"
+    }).click(AddNewStep));
+
+    fset.append($("<input />").attr({
+        type: "button",
+        class: "btn btn-default",
+        value: "Execute"
+    }).click(_.partial(ExecuteStep, step)));
+
+    fset.append($("<input />").attr({
+        type: "button",
+        class: "btn btn-danger",
+        value: "Remove"
+    }).click(_.partial(RemoveStep, step)));
+    return fset;
+}
+
+function InitializeScreen() {
+    if (!steps.length) {
+        return;
+    }
+
+    var container = $("#data-container");
+    container.html("");
+
+    for (var i = 0; i < steps.length; i++) {
+        var step = steps[i];
+
+        container.append(CreateStep(i, step));
+    }
+}
+
+document.addEventListener("set-data", function (event) {
+    var hash = window.location.hash;
+    if (hash == "") {
+        return; // load no data;
+    }
+
+    currentData = d(hash.replace("#", ""));
+    steps = [{
+        f: "-1",
+        js: ""
+    }];
+
+    InitializeScreen();
 });
