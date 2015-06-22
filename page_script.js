@@ -1,5 +1,5 @@
 document.GetDataForMunging = function (key, data) {
-    var event = new CustomEvent("hello", {
+    var event = new CustomEvent("datamunger-send", {
         detail: {
             key: key,
             data: data

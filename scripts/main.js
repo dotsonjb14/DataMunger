@@ -1,0 +1,1 @@
+var data = chrome.extension.getBackgroundPage().data;

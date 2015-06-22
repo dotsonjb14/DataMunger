@@ -5,7 +5,7 @@ s.onload = function () {
     s.parentNode.removeChild(s);
 };
 
-document.addEventListener("hello", function (data) {
+document.addEventListener("datamunger-send", function (data) {
     console.log(data);
 
     chrome.runtime.sendMessage(data.detail);
