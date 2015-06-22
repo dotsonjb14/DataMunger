@@ -21,5 +21,8 @@
     "https://ajax.googleapis.com/",
     "tabs"
   ],
-  "web_accessible_resources": ["page_script.js"]
+  "web_accessible_resources": ["page_script.js"],
+  "sandbox": {
+    "pages": ["runner.html"]
+  }
 }

@@ -1,0 +1,22 @@
+{
+  "name": "DataMunger",
+  "version": "0.0.0",
+  "homepage": "https://github.com/dotsonjb14/DataMunger",
+  "authors": [
+    "Joseph Dotson <jdotson@ibs.com>"
+  ],
+  "main": "main.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "underscore": "~1.8.3",
+    "q": "1.0.1",
+    "jquery": "~2.1.4"
+  }
+}
